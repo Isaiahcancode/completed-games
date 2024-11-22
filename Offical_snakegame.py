@@ -12,12 +12,12 @@ pygame.mixer.music.load("main_menu.wav")
 pygame.mixer.music.load("game_theme.wav")
 box_len = 1500
 box_height = 1000
-color_1 = (0, 0, 0)  # white (keep as is)
-color_2 = (255, 87, 51)  # vibrant red-orange
-color_3 = (255, 255, 255)  # white (keep as is)
-color_4 = (247, 215, 0)  # bright yellow
-color_5 = (40, 180, 99)  # vibrant green
-color_6 = (255, 59, 48)  # bright red
+color_1 = (0, 0, 0)        # Black (original, as it fits the retro feel)
+color_2 = (255, 87, 51)     # Retro vibrant red-orange (unchanged)
+color_3 = (255, 255, 255)   # White (unchanged)
+color_4 = (247, 215, 0)     # Bright yellow (unchanged)
+color_5 = (50, 205, 50)     # Vibrant green (slightly darker for a retro look)
+color_6 = (255, 69, 0)      # Bright red (changed for a deeper, more retro red)
 
 add_caption = pygame.display.set_mode((box_len, box_height))
 pygame.display.set_caption("SNAKE GAME")
@@ -112,12 +112,14 @@ def main_menu():
         if draw_button("Welcome to Snake game", box_len / 6, box_height / 3 - 60, button_width, button_height, color_5, (0, 200, 0)):
             click_sound.play()
         if draw_button("Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
+            click_sound.play()
             game_start()
-            click_sound.play() 
+            
         if draw_button("Controls", box_len / 6, box_height / 3 + 120, button_width, button_height, color_5, (220, 200, 0)):
             print("movement = wsad or arrowkeys press, p for play/pause menu")
             click_sound.play()
         if draw_button("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
+            click_sound.play()
             pygame.quit()
             quit()
 
@@ -259,15 +261,17 @@ def game_start():
     while not game_over:
         
         while game_close:
-            game_over_sound.play()
+            pygame.mixer.music.stop()
             add_caption.fill(color_1)
             display_msg("You lost!", color_4)
             final_score(snake_len - 1)
 
             # Draw buttons for Restart and Quit
             if draw_button("Restart", box_len / 6, box_height / 2 - 40, 200, 50, color_5, (0, 200, 0)):
+                click_sound.play()
                 game_start()  # Restart the game
             if draw_button("Quit", box_len / 6, box_height / 2 + 20, 200, 50, color_4, (200, 200, 0)):
+                click_sound.play()
                 pygame.quit()
                 quit()
 
