@@ -17,13 +17,10 @@ On macOS/Linux: Open your Terminal.
 3. Install Pygame Using pip
 Run the following command:
 
-bash
-Copy code
+
 pip install pygame
 4. Verify Installation
 After installation, run:
 
-bash
-Copy code
 python -m pygame --version
 If Pygame is installed, it will display the installed version.
