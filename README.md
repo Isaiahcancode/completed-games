@@ -5,3 +5,25 @@
 controls are wsad and arrow keys for movement press p to play and to pause during the game if you press on the x at the top right cornner it should let you go back to the main menu while in the game.
 Thank you for playing
 This game was made by IsaiahT
+
+To download and install Pygame, follow these steps:
+
+1. Ensure Python is Installed
+Download and install Python from the official Python website if you don’t already have it.
+Make sure to check the box "Add Python to PATH" during installation.
+2. Open Command Prompt or Terminal
+On Windows: Press Win + R, type cmd, and press Enter.
+On macOS/Linux: Open your Terminal.
+3. Install Pygame Using pip
+Run the following command:
+
+bash
+Copy code
+pip install pygame
+4. Verify Installation
+After installation, run:
+
+bash
+Copy code
+python -m pygame --version
+If Pygame is installed, it will display the installed version.
