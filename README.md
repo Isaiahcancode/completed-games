@@ -1,6 +1,6 @@
 # completed-games
  <h1 style="family-font:cursive; color:blue;">MY New place for downlading this game is itch.io it is called NEW SNAKE GAME</h1>
- <h2>then if your computer gives you a warning this is because this is a exe file click on more options and press run any ways.</h2>
+ <h2>note# i will not be updating this very much</h2>
  <h3>i will try adding updates like diffuclty modes soon if you have suggestions, sounds i could implement, or bug reports you can contact me through my email itayl715@evit.edu </h3>
 controls are wsad and arrow keys for movement press p to play and to pause during the game if you press on the x at the top right cornner it should let you go back to the main menu while in the game.
 Thank you for playing
