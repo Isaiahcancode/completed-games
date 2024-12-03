@@ -4,12 +4,14 @@ import time
 pygame.init()
 pygame.mixer.init
 
-game_over_sound = pygame.mixer.Sound("game_over sound.wav")
+
 Food_collection_sound= pygame.mixer.Sound("food colection sound.wav")
 click_sound = pygame.mixer.Sound("click.wav")
 explosion_sound = pygame.mixer.Sound("explosion.wav")
 pygame.mixer.music.load("main_menu.wav")
-pygame.mixer.music.load("game_theme.wav")
+pygame.mixer.music.load("game_theme.mp3")
+pygame.mixer.music.load("end.mp3")
+level_sound = pygame.mixer.Sound("Level_up.mp3")
 box_len = 1500
 box_height = 1000
 color_1 = (0, 0, 0)        # Black (original, as it fits the retro feel)
@@ -28,6 +30,9 @@ snake_speed = 15
 
 display_style = pygame.font.SysFont("arial", 30, "bold")
 score_font = pygame.font.SysFont("arial", 45, "bold")
+
+level = 1  # Starting level
+food_to_next_level = 5  # Food needed to level up
 
 def final_score(score):
     value = score_font.render("Enjoy the snake game -------- Your score is: " + str(score), True, color_2)
@@ -109,16 +114,16 @@ def main_menu():
         animated_color = (color_value, color_value, 255)
 
         
-        if draw_button("Welcome to Snake game", box_len / 6, box_height / 3 - 60, button_width, button_height, color_5, (0, 200, 0)):
+        if draw_button_with_effects("Welcome to Snake game", box_len / 6, box_height / 3 - 60, button_width, button_height, color_5, (0, 200, 0)):
             click_sound.play()
-        if draw_button("Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
+        if draw_button_with_effects("Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
             click_sound.play()
             game_start()
             
-        if draw_button("Controls", box_len / 6, box_height / 3 + 120, button_width, button_height, color_5, (220, 200, 0)):
+        if draw_button_with_effects("Controls", box_len / 6, box_height / 3 + 120, button_width, button_height, color_5, (220, 200, 0)):
             print("movement = wsad or arrowkeys press, p for play/pause menu")
             click_sound.play()
-        if draw_button("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
+        if draw_button_with_effects("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
             click_sound.play()
             pygame.quit()
             quit()
@@ -190,6 +195,7 @@ def pause_menu():
     paused = True
     while paused:
         add_caption.fill(color_1)  # Clear the screen
+        
 
         # Add a semi-transparent background effect to make the menu stand out
         overlay = pygame.Surface((box_len, box_height))
@@ -204,8 +210,9 @@ def pause_menu():
 
         # Draw "Resume" and "Quit" buttons with enhanced styling
         if draw_button_with_effects("Resume", box_len / 6, box_height / 2 - 60, 300, 50, color_2, (255, 140, 0)):
-            paused = False  # Unpause the game
+            paused = False
             click_sound.play()
+            
         if draw_button_with_effects("Quit", box_len / 6, box_height / 2 + 20, 300, 50, color_4, (255, 255, 0)):
             pygame.quit()
             quit()
@@ -225,9 +232,9 @@ def pause_menu():
             
                     
 def game_start():
-    global snake_speed
+    global snake_speed,level,food_to_next_level
     pygame.mixer.music.stop()
-    pygame.mixer.music.load("game_theme.wav")
+    pygame.mixer.music.load("game_theme.mp3")
     pygame.mixer.music.play(-1)
     default_snake_speed = 14
 
@@ -261,13 +268,16 @@ def game_start():
     while not game_over:
         
         while game_close:
-            pygame.mixer.music.stop()
+            
             add_caption.fill(color_1)
             display_msg("You lost!", color_4)
             final_score(snake_len - 1)
-
+            
             # Draw buttons for Restart and Quit
             if draw_button("Restart", box_len / 6, box_height / 2 - 40, 200, 50, color_5, (0, 200, 0)):
+                level = 1
+                food_to_next_level = 5  # Reset food required threshold
+                food_collected = 0 
                 click_sound.play()
                 game_start()  # Restart the game
             if draw_button("Quit", box_len / 6, box_height / 2 + 20, 200, 50, color_4, (200, 200, 0)):
@@ -336,7 +346,9 @@ def game_start():
 
         
         if value_x1 >= box_len or value_x1 < 0 or value_y1 >= box_height or value_y1 < 0:
-            game_over_sound.play()
+            pygame.mixer_music.stop()
+            pygame.mixer_music.load("end.mp3")
+            pygame.mixer.music.play(-1)
             game_close = True
 
         # Update enemy position if it exists
@@ -379,6 +391,18 @@ def game_start():
             # Check for collision with enemy
             if snake_head == enemy_position:
                 game_close = True
+
+        if food_collected >= food_to_next_level:
+                level += 1
+                snake_speed += 2  # Increase snake speed for higher levels
+                food_to_next_level += 2  # More food needed for the next level
+                food_collected = 0  # Reset food count
+                level_sound.play()
+
+                # Display level up message
+                display_msg(f"Level {level}!", color_5)
+                pygame.display.update()
+                time.sleep(2)
 
         pygame.display.update()
         timer.tick(snake_speed)
