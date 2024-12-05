@@ -144,7 +144,7 @@ def main_menu():
         timer.tick(30)
 def spawn_food():
     food_x = round(random.randrange(0, box_len - snake_block) / 10.0) * 10.0
-    food_y = round(random.randrange(0, box_height - snake_block) / 10.0) * 10.0
+    food_y = round(random.randrange(0, box_height - snake_block) / 10.0) * 10.0 
     return food_x, food_y
 
 def draw_food(foodx_pos, foody_pos):
@@ -239,7 +239,7 @@ def game_start():
     default_snake_speed = 14
 
     default_enemy_move_delay = 25
-    
+    wall_hit = 0
     boosted_speed = 30       
     is_boosting = False       
 
@@ -262,7 +262,7 @@ def game_start():
 
     enemy_position = None  # Enemy starts as None
 
-    enemy_move_delay = 10  # Delay in frames for enemy movement
+    enemy_move_delay = 20  # Delay in frames for enemy movement
     enemy_move_timer = 0  # Timer to keep track of enemy movement delay
 
     while not game_over:
@@ -349,7 +349,8 @@ def game_start():
             pygame.mixer_music.stop()
             pygame.mixer_music.load("end.mp3")
             pygame.mixer.music.play(-1)
-            game_close = True
+            wall_hit += 1
+            if wall_hit == 3: game_close = True
 
         # Update enemy position if it exists
         if enemy_position:
@@ -390,14 +391,20 @@ def game_start():
             pygame.draw.rect(add_caption, color_6, [enemy_position[0], enemy_position[1], snake_block, snake_block])
             # Check for collision with enemy
             if snake_head == enemy_position:
+                pygame.mixer_music.stop()
+                pygame.mixer_music.load("end.mp3")
+                pygame.mixer.music.play(-1)
                 game_close = True
 
         if food_collected >= food_to_next_level:
                 level += 1
-                snake_speed += 2  # Increase snake speed for higher levels
+                snake_speed += 4  # Increase snake speed for higher levels
                 food_to_next_level += 2  # More food needed for the next level
                 food_collected = 0  # Reset food count
                 level_sound.play()
+                if level == 3: enemy_move_delay = 10
+        
+        
 
                 # Display level up message
                 display_msg(f"Level {level}!", color_5)
