@@ -64,6 +64,7 @@ def draw_button(text, x, y, width, height, color, hover_color):
 
     return False
 
+
 def fade_in_text(text, y, color):
     alpha = 0
     while alpha < 255:
@@ -229,7 +230,6 @@ def pause_menu():
                 if event.key == pygame.K_p:
                     paused = False
                     click_sound.play()
-            
                     
 def game_start():
     global snake_speed,level,food_to_next_level
@@ -239,7 +239,6 @@ def game_start():
     default_snake_speed = 14
 
     default_enemy_move_delay = 25
-    wall_hit = 0
     boosted_speed = 30       
     is_boosting = False       
 
@@ -349,8 +348,8 @@ def game_start():
             pygame.mixer_music.stop()
             pygame.mixer_music.load("end.mp3")
             pygame.mixer.music.play(-1)
-            wall_hit += 1
-            if wall_hit == 3: game_close = True
+            game_close = True
+            
 
         # Update enemy position if it exists
         if enemy_position:
@@ -381,6 +380,7 @@ def game_start():
             food_collected += 1 
             Food_collection_sound.play()
             snake_speed += 2
+            if food_collected == 5: pygame.image.load("explode.png")
 
             if food_collected == 5:
                 enemy_position = [random.randrange(0, box_len, snake_block), random.randrange(0, box_height, snake_block)]
