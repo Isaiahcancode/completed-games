@@ -4,7 +4,7 @@ import time
 pygame.init()
 pygame.mixer.init
 
-
+game_over_sound = pygame.mixer.Sound("game_over sound.wav")
 Food_collection_sound= pygame.mixer.Sound("food colection sound.wav")
 click_sound = pygame.mixer.Sound("click.wav")
 explosion_sound = pygame.mixer.Sound("explosion.wav")
@@ -12,15 +12,18 @@ pygame.mixer.music.load("main_menu.wav")
 pygame.mixer.music.load("game_theme.mp3")
 pygame.mixer.music.load("end.mp3")
 level_sound = pygame.mixer.Sound("Level_up.mp3")
-box_len = 1500
-box_height = 1000
+info = pygame.display.Info()
+screen_width = info.current_w  # Screen width
+screen_height = info.current_h  # Screen height
+box_len = screen_width
+box_height = screen_height
 color_1 = (0, 0, 0)        # Black (original, as it fits the retro feel)
 color_2 = (255, 87, 51)     # Retro vibrant red-orange (unchanged)
 color_3 = (255, 255, 255)   # White (unchanged)
 color_4 = (247, 215, 0)     # Bright yellow (unchanged)
 color_5 = (50, 205, 50)     # Vibrant green (slightly darker for a retro look)
 color_6 = (255, 69, 0)      # Bright red (changed for a deeper, more retro red)
-
+color_7 = (201, 67, 250)
 add_caption = pygame.display.set_mode((box_len, box_height))
 pygame.display.set_caption("SNAKE GAME")
 
@@ -64,7 +67,6 @@ def draw_button(text, x, y, width, height, color, hover_color):
 
     return False
 
-
 def fade_in_text(text, y, color):
     alpha = 0
     while alpha < 255:
@@ -75,8 +77,18 @@ def fade_in_text(text, y, color):
         pygame.display.update()
         alpha += 5
         timer.tick(30)
-
+def fade_out_text(text, y, color):
+    alpha = 255
+    while alpha > 0:
+        add_caption.fill(color_1)  # Clear the screen
+        menu_text = display_style.render(text, True, color)
+        menu_text.set_alpha(alpha)
+        add_caption.blit(menu_text, (box_len / 6, y))
+        pygame.display.update()
+        alpha -= 5  # Reduce alpha to make it fade out
+        timer.tick(30)
 def main_menu():
+    global color_1, color_2, color_3, color_4
     fade_amount = 5
     color_value = 0
     increasing = True
@@ -115,17 +127,29 @@ def main_menu():
         animated_color = (color_value, color_value, 255)
 
         
-        if draw_button_with_effects("Welcome to Snake game", box_len / 6, box_height / 3 - 60, button_width, button_height, color_5, (0, 200, 0)):
-            click_sound.play()
-        if draw_button_with_effects("Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
-            click_sound.play()
-            game_start()
-            
-        if draw_button_with_effects("Controls", box_len / 6, box_height / 3 + 120, button_width, button_height, color_5, (220, 200, 0)):
-            print("movement = wsad or arrowkeys press, p for play/pause menu")
-            click_sound.play()
+     
+        if draw_button_with_effects("Light mode", box_len / 6, box_height / 3 + 180, button_width, button_height, color_5, (220, 200, 0)):
+            color_1 = (220, 245, 255)
+            color_3 = (255, 255, 255)
+            color_4 = (0,0,0)
+            color_6 = color_7
+        if draw_button_with_effects("Dark_mode", box_len / 6, box_height / 3 + 240, button_width, button_height, color_5, (220, 200, 0)):
+        
+            color_3 = (255, 255, 255)
+            color_1 = (0,0,0)
+            color_4 = (247, 215, 0)
         if draw_button_with_effects("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
             click_sound.play()
+        if draw_button_with_effects("Welcome to Snake game", box_len / 6, box_height / 3 - 60, button_width, button_height, color_5, (0, 200, 0)):
+            fade_in_text("Welcome to Snakegame drown...Thank you for playing", box_height / 2, color_4)
+            fade_out_text("Welcome to Snakegame drown...Thank you for playing", box_height / 2, color_4)
+        if draw_button_with_effects(
+            "Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
+            game_start() 
+        if draw_button_with_effects("Controls", box_len / 6, box_height / 3 + 120, button_width, button_height, color_5, (220, 200, 0)):
+            fade_in_text("Controls: W/A/S/D or Arrow Keys - Move | P - Pause", box_height / 2, color_4)
+            fade_out_text("Controls: W/A/S/D or Arrow Keys - Move | P - Pause", box_height / 2, color_4)
+        if draw_button_with_effects("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
             pygame.quit()
             quit()
 
@@ -145,7 +169,7 @@ def main_menu():
         timer.tick(30)
 def spawn_food():
     food_x = round(random.randrange(0, box_len - snake_block) / 10.0) * 10.0
-    food_y = round(random.randrange(0, box_height - snake_block) / 10.0) * 10.0 
+    food_y = round(random.randrange(0, box_height - snake_block) / 10.0) * 10.0
     return food_x, food_y
 
 def draw_food(foodx_pos, foody_pos):
@@ -230,6 +254,7 @@ def pause_menu():
                 if event.key == pygame.K_p:
                     paused = False
                     click_sound.play()
+            
                     
 def game_start():
     global snake_speed,level,food_to_next_level
@@ -239,6 +264,7 @@ def game_start():
     default_snake_speed = 14
 
     default_enemy_move_delay = 25
+    
     boosted_speed = 30       
     is_boosting = False       
 
@@ -261,7 +287,7 @@ def game_start():
 
     enemy_position = None  # Enemy starts as None
 
-    enemy_move_delay = 20  # Delay in frames for enemy movement
+    enemy_move_delay = 10  # Delay in frames for enemy movement
     enemy_move_timer = 0  # Timer to keep track of enemy movement delay
 
     while not game_over:
@@ -349,7 +375,6 @@ def game_start():
             pygame.mixer_music.load("end.mp3")
             pygame.mixer.music.play(-1)
             game_close = True
-            
 
         # Update enemy position if it exists
         if enemy_position:
@@ -380,7 +405,6 @@ def game_start():
             food_collected += 1 
             Food_collection_sound.play()
             snake_speed += 2
-            if food_collected == 5: pygame.image.load("explode.png")
 
             if food_collected == 5:
                 enemy_position = [random.randrange(0, box_len, snake_block), random.randrange(0, box_height, snake_block)]
@@ -391,20 +415,14 @@ def game_start():
             pygame.draw.rect(add_caption, color_6, [enemy_position[0], enemy_position[1], snake_block, snake_block])
             # Check for collision with enemy
             if snake_head == enemy_position:
-                pygame.mixer_music.stop()
-                pygame.mixer_music.load("end.mp3")
-                pygame.mixer.music.play(-1)
                 game_close = True
 
         if food_collected >= food_to_next_level:
                 level += 1
-                snake_speed += 4  # Increase snake speed for higher levels
+                snake_speed += 2  # Increase snake speed for higher levels
                 food_to_next_level += 2  # More food needed for the next level
                 food_collected = 0  # Reset food count
                 level_sound.play()
-                if level == 3: enemy_move_delay = 10
-        
-        
 
                 # Display level up message
                 display_msg(f"Level {level}!", color_5)
