@@ -4,7 +4,7 @@ import time
 pygame.init()
 pygame.mixer.init
 
-game_over_sound = pygame.mixer.Sound("game_over sound.wav")
+game_over_sound = pygame.mixer.Sound("end.mp3")
 Food_collection_sound= pygame.mixer.Sound("food colection sound.wav")
 click_sound = pygame.mixer.Sound("click.wav")
 explosion_sound = pygame.mixer.Sound("explosion.wav")
