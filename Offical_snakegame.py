@@ -17,12 +17,19 @@ screen_width = info.current_w  # Screen width
 screen_height = info.current_h  # Screen height
 box_len = screen_width
 box_height = screen_height
-color_1 = (0, 0, 0)        # Black (original, as it fits the retro feel)
-color_2 = (255, 87, 51)     # Retro vibrant red-orange (unchanged)
-color_3 = (255, 255, 255)   # White (unchanged)
-color_4 = (247, 215, 0)     # Bright yellow (unchanged)
-color_5 = (50, 205, 50)     # Vibrant green (slightly darker for a retro look)
-color_6 = (255, 69, 0)      # Bright red (changed for a deeper, more retro red)
+screen = pygame.display.set_mode((screen_width, screen_height))
+background_image = pygame.image.load('desert.jpg')
+background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+screen.blit(background_image, (0, 0))
+background_image2 = pygame.image.load('space.jpg')
+background_image2 = pygame.transform.scale(background_image2, (screen_width, screen_height))
+screen.blit(background_image2, (0, 0))
+color_1 = (28, 28, 28)    # Dark background
+color_2 = (255, 87, 34)   # Bright red-orange (buttons, highlights)
+color_4 = (33, 150, 243)  # Blue (text, UI elements)
+color_3 = (255, 255, 255) # White (text)
+color_5 = (76, 175, 80)   # Green (snake or interactive objects)
+color_6 = (255, 235, 59)  # Yellow (important buttons, highlight)
 color_7 = (201, 67, 250)
 add_caption = pygame.display.set_mode((box_len, box_height))
 pygame.display.set_caption("SNAKE GAME")
@@ -102,7 +109,7 @@ def main_menu():
     circles = [{'pos': [random.randint(0, box_len), random.randint(0, box_height)], 'radius': random.randint(20, 50), 'speed': [random.choice([-2, 2]), random.choice([-2, 2])]} for _ in range(10)]
 
     while True:
-        add_caption.fill(color_1)
+        screen.blit(background_image, (0,0))
 
         for circle in circles:
             circle['pos'][0] += circle['speed'][0]
@@ -129,27 +136,30 @@ def main_menu():
         
      
         if draw_button_with_effects("Light mode", box_len / 6, box_height / 3 + 180, button_width, button_height, color_5, (220, 200, 0)):
+            click_sound.play()
             color_1 = (220, 245, 255)
             color_3 = (255, 255, 255)
             color_4 = (0,0,0)
             color_6 = color_7
         if draw_button_with_effects("Dark_mode", box_len / 6, box_height / 3 + 240, button_width, button_height, color_5, (220, 200, 0)):
-        
+            click_sound.play
             color_3 = (255, 255, 255)
             color_1 = (0,0,0)
             color_4 = (247, 215, 0)
         if draw_button_with_effects("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
             click_sound.play()
         if draw_button_with_effects("Welcome to Snake game", box_len / 6, box_height / 3 - 60, button_width, button_height, color_5, (0, 200, 0)):
-            fade_in_text("Welcome to Snakegame drown...Thank you for playing", box_height / 2, color_4)
-            fade_out_text("Welcome to Snakegame drown...Thank you for playing", box_height / 2, color_4)
-        if draw_button_with_effects(
-            "Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
+            click_sound.play()
+            fade_in_text("Welcome to Snakegame drowned...Thank you for playing", box_height / 2, color_4)
+            fade_out_text("Welcome to Snakegame drowned...Thank you for playing", box_height / 2, color_4)
+        if draw_button_with_effects("Press P to Play", box_len / 6, box_height / 3, button_width, button_height, color_2, (200, 100, 0)):
             game_start() 
         if draw_button_with_effects("Controls", box_len / 6, box_height / 3 + 120, button_width, button_height, color_5, (220, 200, 0)):
+            click_sound.play()
             fade_in_text("Controls: W/A/S/D or Arrow Keys - Move | P - Pause", box_height / 2, color_4)
             fade_out_text("Controls: W/A/S/D or Arrow Keys - Move | P - Pause", box_height / 2, color_4)
         if draw_button_with_effects("Press Q to Quit", box_len / 6, box_height / 3 + 60, button_width, button_height, color_4, (200, 200, 0)):
+            click_sound.play()
             pygame.quit()
             quit()
 
@@ -257,11 +267,12 @@ def pause_menu():
             
                     
 def game_start():
-    global snake_speed,level,food_to_next_level
+    global snake_speed,level,food_to_next_level,screen
     pygame.mixer.music.stop()
     pygame.mixer.music.load("game_theme.mp3")
     pygame.mixer.music.play(-1)
     default_snake_speed = 14
+    
 
     default_enemy_move_delay = 25
     
