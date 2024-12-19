@@ -8,8 +8,8 @@ game_over_sound = pygame.mixer.Sound("end.mp3")
 Food_collection_sound= pygame.mixer.Sound("food colection sound.wav")
 click_sound = pygame.mixer.Sound("click.wav")
 explosion_sound = pygame.mixer.Sound("explosion.wav")
-pygame.mixer.music.load("main_menu.wav")
-pygame.mixer.music.load("game_theme.mp3")
+pygame.mixer.music.load("menu_3.mp3")
+pygame.mixer.music.load("game_theme2.mp3")
 pygame.mixer.music.load("end.mp3")
 level_sound = pygame.mixer.Sound("Level_up.mp3")
 info = pygame.display.Info()
@@ -102,7 +102,7 @@ def main_menu():
     button_width = 300
     button_height = 50
     pygame.mixer_music.stop()
-    pygame.mixer_music.load("main_menu.wav")
+    pygame.mixer_music.load("menu_3.mp3")
     pygame.mixer.music.play(-1)
 
 
@@ -269,7 +269,7 @@ def pause_menu():
 def game_start():
     global snake_speed,level,food_to_next_level,screen
     pygame.mixer.music.stop()
-    pygame.mixer.music.load("game_theme.mp3")
+    pygame.mixer.music.load("game_theme2.mp3")
     pygame.mixer.music.play(-1)
     default_snake_speed = 14
     
