@@ -142,7 +142,7 @@ def main_menu():
             color_4 = (0,0,0)
             color_6 = color_7
         if draw_button_with_effects("Dark_mode", box_len / 6, box_height / 3 + 240, button_width, button_height, color_5, (220, 200, 0)):
-            click_sound.play
+            click_sound.play()
             color_3 = (255, 255, 255)
             color_1 = (0,0,0)
             color_4 = (247, 215, 0)
@@ -444,3 +444,5 @@ def game_start():
         timer.tick(snake_speed)
 
 main_menu()
+
+""" things  to add new sounds, hover animation, ending  cutscene, ending music, multiplayer option, leaderboard,"""
