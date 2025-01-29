@@ -3,6 +3,7 @@ import random
 import time
 pygame.init()
 pygame.mixer.init
+#add clouds that block the snake when passed through after reaching level 4
 
 game_over_sound = pygame.mixer.Sound("end.mp3")
 Food_collection_sound= pygame.mixer.Sound("food colection sound.wav")
