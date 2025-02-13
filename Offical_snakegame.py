@@ -88,6 +88,8 @@ def fade_out_text(text, y, color):
         pygame.display.update()
         alpha -= 5  # Reduce alpha to make it fade out
         timer.tick(30)
+def cloud_sprite():
+    sprite_img="cloud.png"
 def main_menu():
     global color_1, color_2, color_3, color_4
     fade_amount = 5
@@ -405,7 +407,7 @@ def game_start():
             snake_len += 1  
             food_collected += 1 
             Food_collection_sound.play()
-            snake_speed += 2
+            snake_speed += 1
 
             if food_collected == 5:
                 enemy_position = [random.randrange(0, box_len, snake_block), random.randrange(0, box_height, snake_block)]
@@ -420,7 +422,7 @@ def game_start():
 
         if food_collected >= food_to_next_level:
                 level += 1
-                snake_speed += 2  # Increase snake speed for higher levels
+                snake_speed += 3  # Increase snake speed for higher levels
                 food_to_next_level += 2  # More food needed for the next level
                 food_collected = 0  # Reset food count
                 level_sound.play()
